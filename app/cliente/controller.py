@@ -3,12 +3,12 @@ from flask import jsonify, request
 from flask.views import MethodView
 
 class ClienteG(MethodView):#/cliente
-    def get(self,):
+    def get(self):
         clientes = Cliente.query.all()
 
         return jsonify([cliente.json() for cliente in clientes]),200
 
-    def post(self,):
+    def post(self):
         body = request.json
 
         nome = body.get('nome')

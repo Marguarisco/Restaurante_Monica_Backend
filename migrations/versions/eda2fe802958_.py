@@ -1,8 +1,8 @@
 """empty message
 
-Revision ID: 5c0170012641
+Revision ID: eda2fe802958
 Revises: 
-Create Date: 2022-01-26 03:39:09.654977
+Create Date: 2022-01-26 15:06:55.697374
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '5c0170012641'
+revision = 'eda2fe802958'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -47,7 +47,7 @@ def upgrade():
     op.create_table('estoque',
     sa.Column('id', sa.Integer(), autoincrement=True, nullable=False),
     sa.Column('quantidade', sa.Integer(), nullable=True),
-    sa.Column('em_estoque', sa.Boolean(), nullable=True),
+    sa.Column('em_estoque', sa.Integer(), nullable=True),
     sa.Column('produto_id', sa.Integer(), nullable=True),
     sa.Column('funcionario_id', sa.Integer(), nullable=True),
     sa.ForeignKeyConstraint(['funcionario_id'], ['funcionario.id'], ),
@@ -64,12 +64,10 @@ def upgrade():
     sa.PrimaryKeyConstraint('id')
     )
     op.create_table('produto_pedido',
-    sa.Column('id', sa.Integer(), autoincrement=True, nullable=False),
     sa.Column('produto_id', sa.Integer(), nullable=True),
     sa.Column('pedido_id', sa.Integer(), nullable=True),
     sa.ForeignKeyConstraint(['pedido_id'], ['pedido.id'], ),
-    sa.ForeignKeyConstraint(['produto_id'], ['produto.id'], ),
-    sa.PrimaryKeyConstraint('id')
+    sa.ForeignKeyConstraint(['produto_id'], ['produto.id'], )
     )
     # ### end Alembic commands ###
 

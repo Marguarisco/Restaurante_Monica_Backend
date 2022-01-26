@@ -1,5 +1,5 @@
 from app.models import BaseModel, db
-from app.produto_pedido.models import ProdutoPedido
+from app.produto_pedido.models import produto_pedido
 
 
 
@@ -14,8 +14,8 @@ class Produto(BaseModel):
     restricao = db.Column(db.String)
     valor = db.Column(db.Float)
 
-    pedidos = db.relationship("Pedido", secondary=ProdutoPedido, backref="Produto")
-    estoque = db.relationship("Estoque",backref='Produto',uselist=False)
+    pedidos = db.relationship("Pedido", secondary=produto_pedido, backref="Produtos")
+    estoque = db.relationship("Estoque",backref='Produtos',uselist=False)
 
     def json(self):
         return{

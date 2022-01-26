@@ -1,6 +1,5 @@
 from app.models import BaseModel, db
 from datetime import datetime
-from app.produto_pedido.models import ProdutoPedido
 
 class Pedido(BaseModel):
     __tablename__ = 'pedido'
@@ -10,7 +9,6 @@ class Pedido(BaseModel):
     valor = db.Column(db.Float)
 
     cliente_id = db.Column(db.Integer, db.ForeignKey('cliente.id'))
-    Produtos = db.relationship("Produto", secondary=ProdutoPedido, backref="Pedido")
 
     def json(self):
         return{

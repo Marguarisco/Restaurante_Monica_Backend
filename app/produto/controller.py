@@ -3,7 +3,7 @@ from flask import request, jsonify
 from flask.views import MethodView
 
 class ProdutoG(MethodView):#/produto
-    def post(self,):
+    def post(self):
         body = request.json
 
         nome = body.get('nome')
@@ -24,7 +24,7 @@ class ProdutoG(MethodView):#/produto
             return produto.json(),200
         return {"code_status":"invalid data in request"},400
 
-    def get(self,):
+    def get(self):
 
         produtos = Produto.query.all()
 

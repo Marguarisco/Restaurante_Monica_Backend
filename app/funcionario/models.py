@@ -13,7 +13,7 @@ class Funcionario(BaseModel):
     posicao = db.Column(db.String(20))
     data_nascimento = db.Column(db.String(10))
 
-    estoque = db.relationship("Estoque",backref="Funcionario")
+    estoque = db.relationship("Estoque",backref="Empregado")
 
     def json(self):
         return {

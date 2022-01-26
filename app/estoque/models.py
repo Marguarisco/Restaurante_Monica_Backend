@@ -6,7 +6,7 @@ class Estoque(BaseModel):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     
     quantidade = db.Column(db.Integer)
-    em_estoque = db.Column(db.Boolean)
+    em_estoque = db.Column(db.Integer)
 
     produto_id = db.Column(db.Integer, db.ForeignKey('produto.id'), unique=True)
     funcionario_id = db.Column(db.Integer, db.ForeignKey('funcionario.id'))
