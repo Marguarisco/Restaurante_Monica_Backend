@@ -1,3 +1,6 @@
+from datetime import date
+
+from sqlalchemy import null
 from app.estoque.models import Estoque
 from flask import request, jsonify
 from flask.views import MethodView
@@ -7,10 +10,24 @@ class EstoqueG(MethodView):#/estoque
         body = request.json
 
         quantidade = body.get('quantidade')
-        em_estoque = body.get('em_estoque')
+        ultima_modificacao = body.get('ultima_modificacao')
+        produto_id = body.get('produto_id')
+        funcionario_id = body.get('funcionario_id')
 
-        if isinstance(quantidade,int) and isinstance(em_estoque,str):
-            estoque = Estoque(quantidade=quantidade,em_estoque=em_estoque)
+        if quantidade >= 0:
+            em_estoque = True
+        else:
+            em_estoque = False
+
+        if isinstance(quantidade,int) and isinstance(produto_id,int):
+
+            estoque = Estoque.query.filter_by(produto_id=produto_id).first()
+
+            if estoque:
+                return {"Code_status":"produto_id already linked to another estoque"},400
+
+            estoque = Estoque(quantidade=quantidade,ultima_modificacao=ultima_modificacao,\
+            produto_id=produto_id,funcionario_id=funcionario_id,em_estoque=em_estoque)
 
             estoque.save()
             return estoque.json(),200
@@ -31,13 +48,24 @@ class EstoqueId(MethodView):#/estoque/<int:id>
         body = request.json
 
         quantidade = body.get('quantidade')
-        em_estoque = body.get('em_estoque')
+        ultima_modificacao = body.get('ultima_modificacao')
+        produto_id = body.get('produto_id')
+        funcionario_id = body.get('funcionario_id')
 
-        if isinstance(quantidade,int) and isinstance(em_estoque,str):
+        if quantidade >= 0:
+            em_estoque = True
+        else:
+            em_estoque = False
+
+
+        if isinstance(quantidade,int) and isinstance(produto_id,int):
 
             estoque = Estoque.query.get_or_404(id)
             
             estoque.quantidade = quantidade 
+            estoque.ultima_modificacao = ultima_modificacao
+            estoque.produto_id = produto_id
+            estoque.funcionario_id = funcionario_id
             estoque.em_estoque = em_estoque
 
             estoque.update()
@@ -49,11 +77,23 @@ class EstoqueId(MethodView):#/estoque/<int:id>
         estoque = Estoque.query.get_or_404(id)
 
         quantidade = body.get('quantidade',estoque.quantidade)
-        em_estoque = body.get('em_estoque',estoque.em_estoque)
+        ultima_modificacao = body.get('ultima_modificacao',estoque.ultima_modificacao)
+        produto_id = body.get('produto_id',estoque.produto_id)
+        funcionario_id = body.get('funcionario_id',estoque.produto_id)
 
-        if isinstance(quantidade,int) and isinstance(em_estoque,str):
+        if quantidade >= 0:
+            em_estoque = True
+        else:
+            em_estoque = False
+
+
+        if isinstance(quantidade,int) and isinstance(produto_id,int) :
             
             estoque.quantidade = quantidade 
+            estoque.ultima_modificacao = ultima_modificacao
+            estoque.quantidade = quantidade 
+            estoque.produto_id = produto_id 
+            estoque.funcionario_id = funcionario_id
             estoque.em_estoque = em_estoque
 
             estoque.update()

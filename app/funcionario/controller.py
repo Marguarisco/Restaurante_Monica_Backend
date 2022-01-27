@@ -20,7 +20,12 @@ class FuncionarioG(MethodView):#/funcionario
             funcionario = Funcionario.query.filter_by(email=email).first()
 
             if funcionario:
-                return {"code_status":"user already exist"},400
+                return {"code_status":"funcionario already exist"},400
+
+            funcionario = Funcionario.query.filter_by(cpf=cpf).first()
+
+            if funcionario:
+                return {"code_status":"funcionario already exist"},400
             
             funcionario = Funcionario(nome=nome,cpf=cpf,email=email,\
                 telefone=telefone,posicao=posicao,data_nascimento=data_nascimento)

@@ -6,14 +6,14 @@ class Funcionario(BaseModel):
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     
-    nome = db.Column(db.String(50))
-    cpf = db.Column(db.String(15), nullable=False)
-    email = db.Column(db.String(70), unique=True, index=True)
+    nome = db.Column(db.String(50), nullable=False)
+    cpf = db.Column(db.String(15), unique=True, nullable=False)
+    email = db.Column(db.String(70), unique=True, index=True, nullable=False)
     telefone = db.Column(db.String(13))
     posicao = db.Column(db.String(20))
     data_nascimento = db.Column(db.String(10))
 
-    estoque = db.relationship("Estoque",backref="Empregado")
+    estoque = db.relationship("Estoque", backref="empregado") #one to many
 
     def json(self):
         return {
