@@ -26,3 +26,39 @@ class ClienteId(MethodView):#/cliente/<int:id>
     def get(self,id):
         cliente = Cliente.query.get_or_404(id)
         return cliente.json()
+
+    def put(self,id):
+        body = request.json
+
+        nome = body.get('nome')
+
+        if isinstance(nome,str):
+            
+            cliente = Cliente.query.get_or_404(id)
+            
+            cliente.nome = nome 
+
+            cliente.update()
+            return cliente.json(),200
+        return {"code_status":"invalid data in request"},400
+
+    def patch(self,id):
+        body = request.json
+        cliente = Cliente.query.get_or_404(id)
+
+        nome = body.get('nome',cliente.nome)
+
+        if isinstance(nome,str):
+            
+            
+            cliente.nome = nome 
+
+            cliente.update()
+            return cliente.json(),200
+        return {"code_status":"invalid data in request"},400
+
+    def delete(self,id):
+        cliente = Cliente.query.get_or_404(id)
+        cliente.delete(cliente)
+
+        return {"code_status":"deleted"}, 200

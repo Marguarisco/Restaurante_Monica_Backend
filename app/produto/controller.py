@@ -33,7 +33,7 @@ class ProdutoG(MethodView):#/produto
 class ProdutoId(MethodView):#/produto/<int:id>
     def get(self,id):
         produto = Produto.query.get_or_404(id)
-        return produto
+        return produto.json()
 
     def put(self,id):
         body = request.json

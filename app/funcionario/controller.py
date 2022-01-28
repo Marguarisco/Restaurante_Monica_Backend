@@ -1,6 +1,11 @@
+from click import decorators
 from app.funcionario.models import Funcionario
 from flask import request, jsonify
 from flask.views import MethodView
+from app.extensions import jwt
+from flask_jwt_extended import create_access_token, jwt_required
+
+import bcrypt
 
 class FuncionarioG(MethodView):#/funcionario
     def post(self):
@@ -12,6 +17,7 @@ class FuncionarioG(MethodView):#/funcionario
         telefone = body.get('telefone')
         posicao = body.get('posicao')
         data_nascimento = body.get('data_nascimento')
+        senha = body.get('senha')
 
 
         if isinstance(nome,str) and isinstance(cpf,str) and isinstance(email,str) \
@@ -26,9 +32,11 @@ class FuncionarioG(MethodView):#/funcionario
 
             if funcionario:
                 return {"code_status":"funcionario already exist"},400
+
+            senha_hash = bcrypt.hashpw(senha.encode(), bcrypt.gensalt())
             
             funcionario = Funcionario(nome=nome,cpf=cpf,email=email,\
-                telefone=telefone,posicao=posicao,data_nascimento=data_nascimento)
+                telefone=telefone,posicao=posicao,data_nascimento=data_nascimento,senha_hash=senha_hash)
 
             funcionario.save()
             return funcionario.json(),200
@@ -41,9 +49,11 @@ class FuncionarioG(MethodView):#/funcionario
         return jsonify([funcionario.json() for funcionario in funcionarios]),200
         
 class FuncionarioId(MethodView):#/funcionario/<int:id>
+    decorators = [jwt_required()]
     def get(self,id):
         funcionario = Funcionario.query.get_or_404(id)
-        return funcionario
+        print(funcionario)
+        return funcionario.json(),200
 
     def put(self,id):
         body = request.json
@@ -105,3 +115,19 @@ class FuncionarioId(MethodView):#/funcionario/<int:id>
 
         return {"code_status":"deleted"}, 200
         
+class FuncionarioLogin(MethodView):#/login
+    def post(self):
+        body = request.json
+
+        id = body.get('id')
+        senha = body.get('senha')
+
+        funcionario = Funcionario.query.get_or_404(id)
+
+        if not funcionario or bcrypt.hashpw(senha.encode(), funcionario.senha_hash) != funcionario.senha_hash: 
+            return {"code_status":"id or senha do not exist"},400
+        
+        token = create_access_token(identity = funcionario.id)
+
+        return {"token": token},200
+

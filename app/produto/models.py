@@ -14,6 +14,7 @@ class Produto(BaseModel):
     valor = db.Column(db.Float, nullable=False)
 
     estoque = db.relationship("Estoque",backref='produtos',uselist=False) #one to one
+    data_validade = db.relationship("DataValidade", backref="produto") #one to many
 
     def json(self):
         return{

@@ -9,10 +9,12 @@ class Estoque(BaseModel):
     quantidade = db.Column(db.Integer, nullable=False)
     em_estoque = db.Column(db.Boolean)
     data_criacao = db.Column(db.DateTime, default=datetime.now)
-    ultima_modificacao = db.Column(db.DateTime)
+    ultima_modificacao = db.Column(db.String(8))
 
     produto_id = db.Column(db.Integer, db.ForeignKey('produto.id'), unique=True, nullable=False) #one to one
     funcionario_id = db.Column(db.Integer, db.ForeignKey('funcionario.id')) #one to many
+
+    data_validade = db.relationship("DataValidade", backref="estoque") #one to many
 
     def json(self):
         return{

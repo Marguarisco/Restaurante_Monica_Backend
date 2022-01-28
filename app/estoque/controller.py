@@ -1,6 +1,5 @@
 from datetime import date
 
-from sqlalchemy import null
 from app.estoque.models import Estoque
 from flask import request, jsonify
 from flask.views import MethodView
@@ -42,7 +41,7 @@ class EstoqueG(MethodView):#/estoque
 class EstoqueId(MethodView):#/estoque/<int:id>
     def get(self,id):
         estoque = Estoque.query.get_or_404(id)
-        return estoque
+        return estoque.json()
 
     def put(self,id):
         body = request.json

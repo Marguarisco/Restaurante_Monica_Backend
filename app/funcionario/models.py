@@ -12,6 +12,7 @@ class Funcionario(BaseModel):
     telefone = db.Column(db.String(13))
     posicao = db.Column(db.String(20))
     data_nascimento = db.Column(db.String(10))
+    senha_hash = db.Column(db.String(200), nullable = False)
 
     estoque = db.relationship("Estoque", backref="empregado") #one to many
 

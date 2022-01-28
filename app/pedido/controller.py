@@ -38,7 +38,7 @@ class PedidoG(MethodView):#/pedido
 class PedidoId(MethodView):#/pedido/<int:id>
     def get(self,id):
         pedido = Pedido.query.get_or_404(id)
-        return pedido
+        return pedido.json()
 
     def put(self,id):
         body = request.json
